@@ -1,0 +1,22 @@
+# RapidFire AI — Project Rules
+
+Project: RapidFire AI, an educational trading coach with a paper-first autonomous trading engine.
+
+## Non-negotiables
+
+- Live trading is OFF by default and cannot be enabled by code paths alone. It requires `LIVE_TRADING_ENABLED=true` in `.env` AND a passing go-readiness check AND a typed confirmation in the UI.
+- Every order must pass `RiskManager.check_trade_allowed()` before it is sent. No exceptions, no bypass flags.
+- Never hardcode secrets. All keys come from `.env` via `config.py`. Never log keys.
+- Every external API call has a timeout, error handling, and a fallback or graceful failure.
+- Every trading decision (trade, skip, close, error) is written to the `AutoTradeLog` table with a reason.
+- Write tests for `risk_manager`, `signal_engine` scoring, and position sizing before wiring them to execution.
+- Prefer small, typed, documented functions. Python 3.11+, type hints, pydantic models for API schemas.
+- Do not invent API endpoints or library functions. If unsure of an API shape, read the official docs or ask.
+- All Claude calls go through `claude_service.py`. Model name comes from env var `CLAUDE_MODEL`.
+
+## Stack reminders
+
+- Backend: FastAPI, SQLAlchemy 2 + SQLite, APScheduler, pydantic v2
+- Frontend: React + Vite + TypeScript + TailwindCSS + Recharts
+- Paper-first via Alpaca; live behind gates only
+- Educational framing always — never present output as financial advice
